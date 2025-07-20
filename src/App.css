@@ -24,6 +24,11 @@
   color: white;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+
 .App-link {
   color: #61dafb;
 }
