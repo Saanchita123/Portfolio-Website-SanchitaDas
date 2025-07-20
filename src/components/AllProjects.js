@@ -36,7 +36,7 @@ const AllProjects = () => {
       id: 4,
       title: "Puppy addoption ",
       description: "Adopt puppies and contact the near by shelters.",
-      image: "images/ima1.png",
+      image: "images/ima1.jpg",
       githubLink: "https://github.com/Saanchita123/New-Puppy-website.git",
       liveLink: "https://new-puppy-website.vercel.app/",
     },
