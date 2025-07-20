@@ -36,9 +36,18 @@ const AllProjects = () => {
       id: 4,
       title: "Puppy addoption ",
       description: "Adopt puppies and contact the near by shelters.",
-      image: "images/image.png",
-      githubLink: "https://github.com/Saanchita123/puppies-adoption.git",
-      liveLink: "https://saanchita123.github.io/puppies-adoption/",
+      image: "images/ima1.png",
+      githubLink: "https://github.com/Saanchita123/New-Puppy-website.git",
+      liveLink: "https://new-puppy-website.vercel.app/",
+    },
+
+       {
+      id: 5,
+      title: "Personal Portfolio ",
+      description: "Personal Portfolio",
+      image: "images/portfolio-project.png",
+      githubLink: "https://github.com/Saanchita123/Portfolio-Website-SanchitaDas.git",
+      liveLink: "https://portfolio-website-sanchita-das.vercel.app/",
     }
 
     // Add more as needed
