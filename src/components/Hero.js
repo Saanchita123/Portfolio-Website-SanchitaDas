@@ -1,20 +1,19 @@
-import React from "react";
-import { motion } from "framer-motion";
-import { Sparkles } from "lucide-react";
+import { useEffect, useState } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 
-// Custom Hook
+// Custom Typewriter Hook
 function useTypewriter(
   words,
-  typingSpeed = 100,
-  deletingSpeed = 50,
+  typingSpeed = 150,
+  deletingSpeed = 75,
   pauseBetweenWords = 2000,
   pauseAfterDeleting = 500
 ) {
-  const [index, setIndex] = React.useState(0);
-  const [displayed, setDisplayed] = React.useState("");
-  const [isDeleting, setIsDeleting] = React.useState(false);
+  const [index, setIndex] = useState(0);
+  const [displayed, setDisplayed] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     let timeout;
     const current = words[index];
     if (!isDeleting && displayed !== current) {
@@ -36,256 +35,193 @@ function useTypewriter(
       }, pauseAfterDeleting);
     }
     return () => clearTimeout(timeout);
-  }, [displayed, isDeleting, index]);
+  }, [
+    displayed,
+    isDeleting,
+    index,
+    words,
+    typingSpeed,
+    deletingSpeed,
+    pauseBetweenWords,
+    pauseAfterDeleting,
+  ]);
 
   return displayed;
 }
 
-const floatAnimation = {
-  y: [0, -10, 0],
-  transition: {
-    duration: 3,
-    repeat: Infinity,
-    ease: "easeInOut",
-  },
-};
-
 const textStagger = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.12 } },
+  visible: { transition: { staggerChildren: 0.15 } },
 };
 
 const textFadeUp = {
-  hidden: { opacity: 0, y: 32 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: [0.25, 0.25, 0.25, 0.75],
+    },
+  },
+};
+
+const imageAnimation = {
+  hidden: { scale: 0.95, opacity: 0 },
+  visible: {
+    scale: 1,
+    opacity: 1,
+    transition: {
+      duration: 0.8,
+      delay: 0.2,
+    },
+  },
 };
 
 export default function HeroSection() {
-  const profession = useTypewriter([
-    "Software Engineer",
+  const { scrollY } = useScroll();
+  const opacity = useTransform(scrollY, [0, 300], [1, 0.3]);
+
+  const typewriterText = useTypewriter([
     "UI/UX Designer",
-    "Full Stack Developer",
+    "Frontend Developer",
+    "Creative Designer",
   ]);
 
   return (
     <motion.section
       id="home"
-      className="relative flex flex-col-reverse md:flex-row items-center justify-between bg-transparent min-h-screen w-full px-6 py-12 md:py-24 overflow-hidden transition-colors duration-500"
-      initial={{ opacity: 0, y: 40 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7, ease: "easeOut" }}
+      className="relative font-poppins flex flex-col items-center justify-center bg-black min-h-screen w-full px-4 sm:px-6 lg:px-8 py-16 overflow-hidden"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1 }}
+      style={{ opacity }}
     >
-      {/* Decorative Sparkles */}
-      <motion.div
-        className="absolute top-10 left-10 text-purple-300 opacity-20 dark:opacity-40 z-0"
-        animate={{ rotate: [0, 360], scale: [1, 1.3, 1] }}
-        transition={{
-          duration: 12,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 2,
-        }}
-      >
-        <Sparkles size={60} />
-      </motion.div>
-
-      <motion.div
-        className="absolute bottom-10 right-10 text-pink-300 opacity-20 dark:opacity-40 z-0"
-        animate={{ rotate: [0, -360], scale: [1, 1.4, 1] }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <Sparkles size={50} />
-      </motion.div>
-
-      {/* Floating Bubbles */}
-      {[...Array(6)].map((_, i) => {
-        const colors = [
-          "bg-purple-200 dark:bg-purple-600",
-          "bg-blue-200 dark:bg-blue-600",
-          "bg-cyan-200 dark:bg-cyan-600",
-          "bg-emerald-200 dark:bg-emerald-600",
-          "bg-yellow-200 dark:bg-yellow-500",
-          "bg-orange-200 dark:bg-orange-500",
-        ];
-
-        return (
+      {/* Subtle ambient particles */}
+      <div className="absolute inset-0 pointer-events-none">
+        {[...Array(8)].map((_, i) => (
           <motion.div
             key={i}
-            className={`absolute rounded-full ${colors[i]} opacity-40 z-0`}
+            className="absolute rounded-full w-1 h-1 bg-zinc-700 opacity-30"
             style={{
-              width: `${12 + i * 4}px`,
-              height: `${12 + i * 4}px`,
-              left: `${10 + i * 12}%`,
-              top: `${80 + i * 10}%`,
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
             }}
             animate={{
-              y: [0, -800],
-              opacity: [0.4, 0.8, 0.4, 0],
-              scale: [1, 1.2, 1],
+              y: [0, Math.random() * 30 - 15, 0],
+              opacity: [0.2, 0.4, 0.2],
             }}
             transition={{
-              duration: 8 + i * 2,
+              duration: 3 + Math.random() * 3,
               repeat: Infinity,
               ease: "easeInOut",
-              delay: i * 1.2,
+              delay: Math.random() * 2,
             }}
           />
-        );
-      })}
+        ))}
+      </div>
 
       {/* Hero Content */}
       <motion.div
-        className="relative z-10 flex-1 mx-5 flex flex-col items-start md:pr-10 text-left"
+        className="relative z-10 flex flex-col items-center text-center max-w-4xl w-full"
         variants={textStagger}
         initial="hidden"
         animate="visible"
       >
-        <div className="flex items-center gap-2 text-white border-2 border-100-gray rounded-full px-3 py-2 my-1 text-sm font-medium shadow">
-          <span className="inline-block w-2 h-2 bg-green-500 rounded-full"></span>
-          Available for work
-        </div>
-
-        <motion.span
-          className="text-lg text-gray-700 dark:text-gray-300 mb-1"
-          variants={textFadeUp}
-        >
-          Hello, I'm
-        </motion.span>
-
-        <motion.h1
-          className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-3 leading-tight"
-          variants={textFadeUp}
-        >
-          <span className="block text-black dark:text-white">Sanchita Das</span>
-          <span className="block text-pink-600 dark:text-pink-400 text-2xl mt-2 h-9">
-            {profession}
-            <span className="ml-1 inline-block w-2 h-6 bg-pink-400 animate-pulse rounded-sm"></span>
-          </span>
-        </motion.h1>
-
-        <motion.p
-          className="text-base text-gray-700 dark:text-gray-400 max-w-xl mt-3"
-          variants={textFadeUp}
-        >
-          I'm a UI/UX designer and front-end developer who transforms ideas into
-          intuitive, visually compelling digital experiences. I build
-          user-focused interfaces that bring creativity and functionality
-          together.
-        </motion.p>
-
-        {/* ✅ Fixed Button Layout */}
-        <motion.div
-          className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6 w-full sm:w-auto text-center"
-          variants={textFadeUp}
-        >
-          <a
-            href="https://drive.google.com/file/d/16x2XyLDN4KpV8i8UGiJ4izc1aPPEBlT7/view?usp=sharing"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-black dark:bg-white text-white dark:text-black rounded-full py-2 px-5 shadow hover:opacity-90 transition font-semibold"
-          >
-            Download CV
-          </a>
-          <a
-            href="#contact"
-            className="border border-black dark:border-white text-black dark:text-white rounded-full py-2 px-5 hover:bg-gray-100 dark:hover:bg-white/10 transition font-semibold"
-          >
-            Get In Touch
-          </a>
-        </motion.div>
-
-        <div className="flex gap-3 flex-wrap my-5">
-          <div className="inline-flex items-center px-3 py-1.5 bg-gray-800 text-white text-sm font-medium rounded-full shadow-sm">
-            SIH Finalist
-          </div>
-          <div className="inline-flex items-center px-3 py-1.5 bg-gray-800 text-white text-sm font-medium rounded-full shadow-sm">
-            Hack4Bengal
-          </div>
-        </div>
-      </motion.div>
-
-      {/* Image Section */}
-      <motion.div
-        className="relative z-10 flex-1 flex justify-center mt-10 md:mt-0"
-        initial={{ scale: 0.85, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{
-          duration: 0.8,
-          delay: 0.2,
-          type: "spring",
-          stiffness: 120,
-        }}
-      >
-        <motion.div
-          className="relative"
-          whileHover={{ y: -8, scale: 1.04 }}
-          transition={{ type: "spring", stiffness: 180 }}
+        {/* Profile Image - Draggable */}
+        <motion.div 
+          className="mb-8 sm:mb-10" 
+          variants={imageAnimation}
+          drag
+          dragConstraints={{
+            top: -400,
+            left: -600,
+            right: 600,
+            bottom: 400,
+          }}
+          dragElastic={0.1}
+          whileDrag={{ scale: 1.1, cursor: "grabbing" }}
         >
           <motion.div
-            className="flex-1 flex justify-center mb-8 md:mb-0"
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{
-              duration: 1,
-              delay: 0.2,
-              type: "spring",
-              stiffness: 100,
-            }}
+            className="relative rounded-full p-[2px] bg-gradient-to-br from-zinc-700 via-zinc-600 to-zinc-700 cursor-grab active:cursor-grabbing"
+            whileHover={{ scale: 1.02 }}
+            transition={{ type: "spring", stiffness: 300 }}
           >
-            <motion.div className="relative" animate={floatAnimation}>
-              {/* Decorative Gradient Bubbles */}
-              <motion.div
-                className="absolute -top-6 -right-6 w-24 h-24 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full opacity-20 blur-xl"
-                animate={{ scale: [1, 1.2, 1], rotate: [0, 180, 360] }}
-                transition={{ duration: 8, repeat: Infinity }}
-              />
-              <motion.div
-                className="absolute -bottom-6 -left-6 w-32 h-32 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-full opacity-20 blur-xl"
-                animate={{ scale: [1.2, 1, 1.2], rotate: [360, 180, 0] }}
-                transition={{ duration: 10, repeat: Infinity }}
-              />
-
-              {/* Main Image */}
-              <motion.div
-                className="relative p-1 rounded-[2rem] bg-gradient-to-br from-purple-500 via-pink-500 to-blue-500"
-                whileHover={{ scale: 1.02, rotate: 1 }}
-                transition={{ type: "spring", stiffness: 300 }}
-              >
-                <div className="p-3 rounded-[1.8rem] bg-white dark:bg-slate-800 shadow-2xl">
-                  <img
-                    src="images/portfolio.jpg"
-                    alt="Sanchita Das - UI/UX Designer"
-                    className="rounded-[1.5rem] object-cover w-[280px] h-[350px] sm:w-[320px] sm:h-[380px] md:w-[350px] md:h-[400px] filter grayscale-0 hover:grayscale-0 transition-all duration-500"
-                  />
-
-                  {/* Floating Sparkles */}
-                  <motion.div
-                    className="absolute -top-2 -right-2 text-yellow-400"
-                    animate={{ rotate: [0, 360], scale: [1, 1.3, 1] }}
-                    transition={{
-                      duration: 6,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
-                  >
-                    <Sparkles size={24} />
-                  </motion.div>
-
-                  <motion.div
-                    className="absolute -bottom-2 -left-2 text-purple-400"
-                    animate={{ rotate: [360, 0], scale: [1.2, 1, 1.2] }}
-                    transition={{
-                      duration: 4,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
-                  >
-                    <Sparkles size={20} />
-                  </motion.div>
-                </div>
-              </motion.div>
-            </motion.div>
+            <img
+              src="images/portfolio.jpg"
+              alt="Sanchita - Software Developer and UI/UX Designer"
+              className="rounded-full object-cover w-28 h-28 sm:w-36 sm:h-36 md:w-40 md:h-40 bg-black pointer-events-none"
+            />
           </motion.div>
+        </motion.div>
+
+        {/* Greeting Text */}
+        <motion.h1
+          className="text-3xl sm:text-4xl md:text-5xl text-white mb-3 font-light tracking-wide"
+          variants={textFadeUp}
+        >
+          Hey, I'm Sanchita
+        </motion.h1>
+
+        {/* Main Title with Typewriter */}
+        <motion.div className="mb-6 sm:mb-8" variants={textFadeUp}>
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-light text-zinc-400">
+            <span className="text-white">
+              {typewriterText}
+              <span className="ml-1 inline-block w-0.5 h-6 sm:h-7 md:h-8 bg-white animate-pulse"></span>
+            </span>
+          </h2>
+        </motion.div>
+
+        {/* Description */}
+        <motion.p
+          className="text-sm sm:text-base md:text-lg text-zinc-400 max-w-md sm:max-w-lg mb-8 sm:mb-10 font-light leading-relaxed"
+          variants={textFadeUp}
+        >
+          Creating beautiful digital experiences with code and design
+        </motion.p>
+
+        {/* Buttons */}
+        <motion.div
+          className="flex flex-col sm:flex-row items-center gap-4"
+          variants={textFadeUp}
+        >
+          <a
+            href="https://drive.google.com/file/d/1h8ghHg8o9Gw8Qhdlm9Q23qeAHEEtgm4H/view?usp=sharing"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-white text-black rounded-sm py-2.5 px-8 hover:bg-zinc-200 transition-colors font-normal text-sm sm:text-base w-full sm:w-auto"
+          >
+            Resume
+          </a>
+          <a
+            href="https://mail.google.com/mail/?view=cm&fs=1&to=sanchitad648@gmail.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="border border-zinc-700 text-white rounded-sm py-2.5 px-8 hover:border-zinc-500 hover:bg-zinc-900 transition-all font-normal text-sm sm:text-base w-full sm:w-auto"
+          >
+            Contact Me
+          </a>
+        </motion.div>
+      </motion.div>
+
+      {/* Scroll Indicator */}
+      <motion.div
+        className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.5, duration: 1 }}
+      >
+        <motion.div
+          className="w-5 h-8 border border-zinc-700 rounded-full flex justify-center"
+          animate={{ opacity: [0.3, 1, 0.3] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        >
+          <motion.div
+            className="w-1 h-2 bg-zinc-600 rounded-full mt-2"
+            animate={{ y: [0, 10, 0] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          />
         </motion.div>
       </motion.div>
     </motion.section>

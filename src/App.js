@@ -9,32 +9,20 @@ import Skills from "./components/Skills";
 import Contact from "./components/Contact";
 import ServicesSection from "./components/Service";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import AllProjects from "./components/AllProjects"; // Make sure this exists
+import AllProjects from "./components/AllProjects";
+import React, { useState } from "react";
+import PageLoader from "./components/pageLoader";
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
+  
   return (
     <Router>
-      <div className="App dark:bg-zinc-900 relative overflow-hidden">
-        {/* Moving Color Background */}
-        <motion.div
-          className="fixed inset-0 opacity-5 dark:opacity-10 pointer-events-none z-0"
-          animate={{
-            background: [
-              "radial-gradient(circle at 20% 20%, #ec4899 0%, transparent 50%)",
-              "radial-gradient(circle at 80% 60%, #8b5cf6 0%, transparent 50%)",
-              "radial-gradient(circle at 40% 80%, #06b6d4 0%, transparent 50%)",
-              "radial-gradient(circle at 70% 30%, #f59e0b 0%, transparent 50%)",
-              "radial-gradient(circle at 30% 70%, #ef4444 0%, transparent 50%)",
-              "radial-gradient(circle at 60% 20%, #10b981 0%, transparent 50%)",
-              "radial-gradient(circle at 20% 20%, #ec4899 0%, transparent 50%)"
-            ]
-          }}
-          transition={{ 
-            duration: 20, 
-            repeat: Infinity, 
-            ease: "easeInOut" 
-          }}
-        />
+      <div className="App bg-black relative overflow-x-hidden min-h-screen">
+        {/* Page Loader */}
+        {isLoading && (
+          <PageLoader onLoadingComplete={() => setIsLoading(false)} />
+        )}
 
         {/* Main Content */}
         <div className="relative z-10">
@@ -43,40 +31,80 @@ function App() {
             <Route
               path="/"
               element={
-                <>
-                  <Navbar />
+                <div className="w-full">
+                  {/* Navbar - Fixed positioning with proper z-index */}
+                  <div className="fixed top-0 left-0 right-0 z-50">
+                    <Navbar />
+                  </div>
 
-                  <section id="home">
-                    <Hero />
-                  </section>
+                  {/* Main Content - Add top padding to account for fixed navbar */}
+                  <main className="w-full pt-16 sm:pt-20 md:pt-24">
+                    {/* Hero Section */}
+                    <section 
+                      id="home" 
+                      className="w-full min-h-screen"
+                    >
+                      <Hero />
+                    </section>
 
-                  <section id="projects">
-                    <Projects />
-                  </section>
+                    {/* Projects Section */}
+                    <section 
+                      id="projects" 
+                      className="w-full scroll-mt-16 sm:scroll-mt-20 md:scroll-mt-24"
+                    >
+                      <Projects />
+                    </section>
 
-                  <section id="achievements">
-                    <Education />
-                  </section>
+                    {/* Achievements Section */}
+                    <section 
+                      id="achievements" 
+                      className="w-full scroll-mt-16 sm:scroll-mt-20 md:scroll-mt-24"
+                    >
+                      <Education />
+                    </section>
 
-                  <section id="skills" className="scroll-mt-24">
-                    <Skills />
-                  </section>
+                    {/* Skills Section */}
+                    <section 
+                      id="skills" 
+                      className="w-full scroll-mt-16 sm:scroll-mt-20 md:scroll-mt-24"
+                    >
+                      <Skills />
+                    </section>
 
-                  <section id="services">
-                    <ServicesSection />
-                  </section>
+                    {/* Services Section */}
+                    <section 
+                      id="services" 
+                      className="w-full scroll-mt-16 sm:scroll-mt-20 md:scroll-mt-24"
+                    >
+                      <ServicesSection />
+                    </section>
 
-                  <section id="contact">
-                    <Contact />
-                  </section>
+                    {/* Contact Section */}
+                    <section 
+                      id="contact" 
+                      className="w-full scroll-mt-16 sm:scroll-mt-20 md:scroll-mt-24"
+                    >
+                      <Contact />
+                    </section>
 
-                  <Footer />
-                </>
+                    {/* Footer */}
+                    <footer className="w-full">
+                      <Footer />
+                    </footer>
+                  </main>
+                </div>
               }
             />
 
             {/* All Projects Page */}
-            <Route path="/projects" element={<AllProjects />} />
+            <Route 
+              path="/projects" 
+              element={
+                <div className="w-full min-h-screen">
+                  <AllProjects />
+                </div>
+              } 
+            />
           </Routes>
         </div>
       </div>

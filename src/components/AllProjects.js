@@ -30,7 +30,7 @@ const AllProjects = () => {
       description: "Manage events seamlessly with dedicated host and student logins.",
       image: "images/image2.png",
       githubLink: "https://github.com/Saanchita123/project-1.git",
-      liveLink: "https://your-portfolio.com/green-strike-logo",
+      liveLink: "",
     },
      {
       id: 4,
@@ -39,15 +39,6 @@ const AllProjects = () => {
       image: "images/ima1.jpg",
       githubLink: "https://github.com/Saanchita123/New-Puppy-website.git",
       liveLink: "https://new-puppy-website.vercel.app/",
-    },
-
-       {
-      id: 5,
-      title: "Personal Portfolio ",
-      description: "Personal Portfolio",
-      image: "images/portfolio-project.png",
-      githubLink: "https://github.com/Saanchita123/Portfolio-Website-SanchitaDas.git",
-      liveLink: "https://portfolio-website-sanchita-das.vercel.app/",
     }
 
     // Add more as needed
@@ -56,26 +47,6 @@ const AllProjects = () => {
   return (
     <section className="min-h-screen bg-white dark:bg-zinc-900 py-24 px-6">
       <div className="max-w-6xl mx-auto">
-        {/* Back Button */}
-      
-
-        {/* Centered Heading */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-zinc-800 dark:text-white mb-3">
-            🚀 All Projects
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto text-base">
-            Here's a full collection of the projects I've worked on during my journey.
-          </p>
-        </div>
-          <div className="mb-8">
-          <button
-            onClick={() => navigate(-1)}
-            className="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-white font-medium px-5 py-2 rounded-full transition duration-200"
-          >
-            ← Back
-          </button>
-        </div>
 
         {/* Projects Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
