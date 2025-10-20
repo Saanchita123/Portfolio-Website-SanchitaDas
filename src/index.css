@@ -24,3 +24,24 @@
 .font-poppins {
   font-family: 'Poppins', sans-serif;
 }
+
+/* Hide vertical scrollbar globally but keep scrolling */
+html, body {
+  height: 100%;
+}
+/* Apply to both html and body (different browsers scroll one or the other) */
+html, body {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none;    /* Firefox */
+}
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 0 !important;  /* Chrome, Safari, Opera */
+  height: 0 !important;
+}
+
+/* Optional: also hide on the main app wrapper if it becomes the scroll container */
+.App::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+}
